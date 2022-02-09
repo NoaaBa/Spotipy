@@ -1,15 +1,16 @@
 from workspace.ETL.Load import Load
 from workspace.Entities.User import User
+from workspace.Storage.DataConfigurator import DataConfigurator
 
 
 class Database:
     def __init__(self):
-        self._database_name = "users_data.txt"
-        self._file_path = r"C:\BasicCourse\Tasks\Spotipy\users"
+        self._database_name = "users_data"
+        self._file_path = DataConfigurator.users_path
         self._file_loader = Load()
 
     def create_db(self):
-        self._file_loader.create_file("hello", self._file_path, self._database_name)
+        self._file_loader.create_file(self._file_path, self._database_name)
 
     def add_user_to_db(self, username, password):
         user = User(username, password)
@@ -19,7 +20,9 @@ class Database:
         file = self._file_loader.get_data_from_file(self._file_path, self._database_name)
         for line in file.readlines():
             if username in line:
+                file.close()
                 return True
+        file.close()
         return False
 
     def check_password_validation(self, username, password):
