@@ -47,5 +47,12 @@ def get_most_popular_songs_by_artist_name(self, artist_name):
     file.close()
 
 
-def get_all_songs_in_album(self, album):
-    pass
+def get_all_songs_in_album(self, album_name):
+    file = open(DataConfigurator.tracks_path + "tracks.json")
+    data_list = json.load(file)
+    songs_list = []
+    for data in data_list:
+        if album_name in data:
+            songs_list.append(data['song_name'])
+    print(*songs_list, sep=", ")
+    file.close()
