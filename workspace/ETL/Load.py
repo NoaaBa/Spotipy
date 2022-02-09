@@ -12,15 +12,20 @@ class Load:
 
     @staticmethod
     def load_data_to_file(data, path, file_name):
-        with open(path + "\\" + file_name + ".json", "a") as file:
-            try:
-                parsed = json.loads(data.toJSON())
-                file.write(json.dumps(parsed, indent=4, sort_keys=True))
+        obj_list = []
+        with open(path + "\\" + file_name + ".json", "a+") as file:
+            if type(data) is list:
                 for line in data:
-                    parsed = json.loads(line.toJSON())
-                    file.write(json.dumps(parsed, indent=4, sort_keys=True))
-            except Exception:
-                pass
+                    obj_list.append(line.__dict__)
+                json.dump(obj_list, file)
+            else:
+                try:
+                    json_data = json.load(file)
+                    json_data.update(data.__dict__)
+                    file.seek(0)
+                    json.dump(json_data, file)
+                except Exception as e:
+                    json.dump(data.__dict__, file)
         file.close()
 
     @staticmethod
