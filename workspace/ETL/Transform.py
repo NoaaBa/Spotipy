@@ -1,4 +1,4 @@
-from workspace.Core.Track import Track
+from workspace.Entities.Track import Track
 
 
 class Transform:
