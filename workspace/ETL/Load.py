@@ -1,16 +1,28 @@
+import json
+
+
 class Load:
-    def create_file(self, data, path, file_name):
+    @staticmethod
+    def create_file(path, file_name):
         try:
             file = open(path + "\\" + file_name, "x")
-            file.write(data)
             file.close()
         except FileExistsError:
             pass
 
-    def load_data_to_file(self, data, path, file_name):
-        file = open(path + "\\" + file_name, "a")
-        file.write(str(data))
+    @staticmethod
+    def load_data_to_file(data, path, file_name):
+        with open(path + "\\" + file_name + ".json", "a") as file:
+            try:
+                parsed = json.loads(data.toJSON())
+                file.write(json.dumps(parsed, indent=4, sort_keys=True))
+                for line in data:
+                    parsed = json.loads(line.toJSON())
+                    file.write(json.dumps(parsed, indent=4, sort_keys=True))
+            except Exception:
+                pass
         file.close()
 
-    def get_data_from_file(self, path, file_name):
+    @staticmethod
+    def get_data_from_file(path, file_name):
         return open(path + "\\" + file_name, "r")
