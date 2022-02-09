@@ -5,7 +5,7 @@ class Extract:
     @staticmethod
     def extract_data(path):
 
-        path_to_json = r"C:\BasicCourse\Tasks\Spotipy\songs\\"
+        path_to_json = path
         json_files = [pos_json for pos_json in os.listdir(path_to_json) if pos_json.endswith('.json')]
 
         entities_list = list()
