@@ -19,5 +19,6 @@ class ETLManager():
         self._data = tranformer.Transform.transform_data(self._data)
 
     # Saves the data into a file.
-    def load(self):
+    def load(self, data):
         loader = Load
+
