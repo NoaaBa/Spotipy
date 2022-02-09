@@ -1,33 +1,32 @@
-# Import the necessary packages
 from consolemenu import *
 from consolemenu.items import *
+from workspace.Core.Database import Database
+from workspace.Methods.UserMenuMethods import UserMenuMethods
+from workspace.ETL.ETLManager import ETLManager
+from workspace.Storage.DataConfigurator import DataConfigurator
 
-# Create the menu
-menu = ConsoleMenu("**** SPOTIPY ****", "Subtitle")
 
-# Create some items
+def main():
+    database = Database()
+    database.create_db()
+    user_methods = UserMenuMethods(database)
+    # TODO don't use magic strings!!
+    # TODO check if songs file exists, if so - don't add new songs to it
+    etl_manager = ETLManager(DataConfigurator.songs_path, DataConfigurator.tracks_path, "tracks")
+    etl_manager.run()
 
-# MenuItem is the base class for all items, it doesn't do anything when selected
-menu_item = MenuItem("Menu Item")
+    menu = ConsoleMenu("Spotipy", "MAIN MENU")
 
-# A FunctionItem runs a Python function when selected
-function_item = FunctionItem("Call a Python function", input, ["Enter an input"])
+    login = FunctionItem("Login", user_methods.user_login, args=[])
+    signup = FunctionItem("Signup", user_methods.user_signup, args=[])
 
-# A CommandItem runs a console command
-command_item = CommandItem("Run a console command",  "touch hello.txt")
 
-# A SelectionMenu constructs a menu from a list of strings
-selection_menu = SelectionMenu(["item1", "item2", "item3"])
 
-# A SubmenuItem lets you add a menu (the selection_menu above, for example)
-# as a submenu of another menu
-submenu_item = SubmenuItem("Submenu item", selection_menu, menu)
+    menu.append_item(login)
+    menu.append_item(signup)
 
-# Once we're done creating them, we just add the items to the menu
-menu.append_item(menu_item)
-menu.append_item(function_item)
-menu.append_item(command_item)
-menu.append_item(submenu_item)
+    menu.start()
+    menu.join()
 
-# Finally, we call show to show the menu and allow the user to interact
-menu.show()
+if __name__ == '__main__':
+    main()
