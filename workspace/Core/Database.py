@@ -1,6 +1,7 @@
 from workspace.ETL.Load import Load
 from workspace.Entities.User import User
 from workspace.Storage.DataConfigurator import DataConfigurator
+import logging
 
 
 class Database:
@@ -8,6 +9,9 @@ class Database:
         self._database_name = "users_data"
         self._file_path = DataConfigurator.users_path
         self._file_loader = Load()
+
+        logging.basicConfig(filename="database_log_file.log", format='%(asctime)s %(message)s', filemode='w')
+        self.logger = logging.getLogger()
 
     def create_db(self):
         self._file_loader.create_file(self._file_path, self._database_name)
@@ -23,6 +27,7 @@ class Database:
                 file.close()
                 return True
         file.close()
+        self.logger.debug("Username doesn't exist.")
         return False
 
     def check_password_validation(self, username, password):
@@ -32,4 +37,5 @@ class Database:
             if username in line:
                 if password in line:
                     return True
+        self.logger.debug("Password was not correct.")
         return False
