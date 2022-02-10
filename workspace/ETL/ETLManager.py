@@ -3,7 +3,7 @@ from workspace.ETL import Transform
 from workspace.ETL import Load
 
 
-class ETLManager():
+class ETLManager:
     def __init__(self, path, path_to_load, file_name):
         self._data = list()
         self._path_extract_file = path

@@ -1,4 +1,5 @@
 import json
+import logging
 
 
 class Load:
@@ -12,6 +13,9 @@ class Load:
 
     @staticmethod
     def load_data_to_file(data, path, file_name):
+        logging.basicConfig(filename="search_log_file.log", format='%(asctime)s %(message)s', filemode='w')
+        logger = logging.getLogger()
+
         obj_list = []
         with open(path + "\\" + file_name + ".json", "a+") as file:
             if type(data) is list:
@@ -24,7 +28,8 @@ class Load:
                     json_data.update(data.__dict__)
                     file.seek(0)
                     json.dump(json_data, file)
-                except Exception as e:
+                except Exception:
+                    logger.debug("Trouble with dumping the data into a JSON file.")
                     json.dump(data.__dict__, file)
         file.close()
 
