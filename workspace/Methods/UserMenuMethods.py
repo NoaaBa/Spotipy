@@ -1,9 +1,13 @@
 from workspace.Core.Database import Database
 from workspace.Entities.User import User
+import logging
+
 
 class UserMenuMethods:
     def __init__(self, database):
         self._database = database
+        logging.basicConfig(filename="user_log_file.log", format='%(asctime)s %(message)s', filemode='w')
+        self.logger = logging.getLogger()
 
     def get_input(self):
         self._username = input("Enter username: ")
@@ -12,7 +16,7 @@ class UserMenuMethods:
     def user_signup(self):
         self.get_input()
         if self._database.check_if_user_exist(self._username):
-            print(f"User {self._username} already exists in Spotipy.")
+            self.logger.info(f"User {self._username} already exists in Spotipy.")
         else:
             self._database.add_user_to_db(self._username, self._password)
 
@@ -20,8 +24,8 @@ class UserMenuMethods:
         self.get_input()
         if self._database.check_if_user_exist(self._username):
             if self._database.check_password_validation(self._username, self._password):
-                print("Logged in successfully.")
+                self.logger.info("Logged in successfully.")
             else:
-                print("Password is incorrect.")
+                self.logger.info("Password is incorrent.")
         else:
-            print(f"User {self._username} doesn't exist in Spotipy.")
+            self.logger.info(f"User {self._username} doesn't exist in Spotipy.")
